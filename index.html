@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Melodia - Gerenciador de Prompts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Menu lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://placehold.co/40x40/5D3FD3/FFFFFF.png?text=P" alt="Logo">
+                    <h2>Prompts</h2>
+                </div>
+                <button id="mobile-toggle" class="mobile-only">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" data-tab="prompts">Prompts</button>
+                    <button class="nav-tab" data-tab="estrutura">Estrutura</button>
+                    <button class="nav-tab" data-tab="workspace">Workspace</button>
+                </div>
+                
+                <div id="prompts-tab" class="tab-content active">
+                    <div class="action-buttons">
+                        <button id="nova-categoria-btn" class="action-btn">
+                            <i class="fas fa-plus"></i> Nova Categoria
+                        </button>
+                        <button id="importar-prompts-btn" class="action-btn">
+                            <i class="fas fa-file-import"></i> Importar Prompts
+                        </button>
+                        <button id="exportar-prompts-btn" class="action-btn">
+                            <i class="fas fa-file-export"></i> Exportar Prompts
+                        </button>
+                    </div>
+                    
+                    <div class="categories-list" id="categories-list">
+                        <!-- Categorias carregadas do banco -->
+                    </div>
+                </div>
+                
+                <div id="estrutura-tab" class="tab-content">
+                    <h3>Gerenciar Estrutura</h3>
+                    <div class="estrutura-options">
+                        <button class="action-btn">
+                            <i class="fas fa-folder"></i> Gerenciar Categorias
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-folder-tree"></i> Gerenciar Subcategorias
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="workspace-tab" class="tab-content">
+                    <h3>Workspace</h3>
+                    <p>Área para anotações temporárias</p>
+                    <textarea id="workspace-text" placeholder="Digite suas anotações aqui..."></textarea>
+                    <button id="save-workspace-btn" class="action-btn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Área de conteúdo dinâmico -->
+            <div id="main-view" class="main-view">
+                <!-- Conteúdo carregado dinamicamente -->
+            </div>
+            
+            <!-- Área de prompts -->
+            <div id="prompts-view" class="prompts-view">
+                <div class="prompts-header">
+                    <h1 id="categoria-titulo">Categoria</h1>
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Buscar...">
+                    </div>
+                </div>
+                
+                <div class="subcategory-selector">
+                    <h3>Subcategorias</h3>
+                    <select id="subcategory-select">
+                        <option value="">Selecione uma subcategoria</option>
+                    </select>
+                </div>
+                
+                <div id="prompts-list" class="prompts-list">
+                    <!-- Prompts carregados do banco -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal Adicionar/Editar Prompt -->
+    <div id="prompt-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Adicionar Prompt</h2>
+            <form id="prompt-form">
+                <input type="hidden" id="prompt-id">
+                <div class="form-group">
+                    <label for="categoria-select">Categoria:</label>
+                    <select id="categoria-select" required>
+                        <!-- Categorias carregadas do banco -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subcategoria-select">Subcategoria:</label>
+                    <select id="subcategoria-select" required>
+                        <option value="">Selecione uma categoria primeiro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="prompt-text">Texto do Prompt:</label>
+                    <textarea id="prompt-text" rows="6" required placeholder="Digite seu prompt aqui..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tags-input">Tags (separadas por vírgula):</label>
+                    <input type="text" id="tags-input" placeholder="Ex: criativo, profissional, detalhado">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Importar -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Importar Prompts</h2>
+            <div class="form-group">
+                <label for="import-categoria">Categoria:</label>
+                <select id="import-categoria" required>
+                    <!-- Categorias carregadas do banco -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="import-subcategoria">Subcategoria:</label>
+                <select id="import-subcategoria" required>
+                    <option value="">Selecione uma categoria primeiro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="import-text">Cole seus prompts (um por linha):</label>
+                <textarea id="import-text" rows="10" placeholder="Prompt 1 #tag1 #tag2&#10;Prompt 2 #tag3&#10;Prompt 3"></textarea>
+            </div>
+            <div class="form-actions">
+                <button id="import-btn" class="btn btn-primary">Importar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Nova Categoria -->
+    <div id="categoria-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="categoria-modal-title">Nova Categoria</h2>
+            <form id="categoria-form">
+                <input type="hidden" id="categoria-id">
+                <div class="form-group">
+                    <label for="categoria-nome">Nome:</label>
+                    <input type="text" id="categoria-nome" required placeholder="Nome da categoria">
+                </div>
+                <div class="form-group">
+                    <label for="categoria-icone">Ícone:</label>
+                    <input type="text" id="categoria-icone" placeholder="Ex: 🎵, 🧠, 🎨">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Notificação -->
+    <div id="notification" class="notification">
+        <span id="notification-message"></span>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/prompts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
