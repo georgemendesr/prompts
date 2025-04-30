@@ -2,8 +2,8 @@
 const SUPABASE_URL = 'https://mjvexybbyepwzpxnnadt.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qdmV4eWJieWVwd3pweG5uYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NDM1MjUsImV4cCI6MjA2MTUxOTUyNX0.lRmaZxVWxFbohknZSUrkbbo3EMT7jUdrHg_va8SwstM';
 
-// Inicializar cliente Supabase
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Inicializar cliente Supabase - Correção
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Funções de utilidade para o Supabase
 const supabaseUtils = {
