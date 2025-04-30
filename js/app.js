@@ -1,29 +1,80 @@
 // Arquivo principal da aplicação
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar gerenciadores
-    viewManager.init();
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar módulos
     promptsManager.init();
-    workspaceManager.init();
-    letrasManager.init();
     
-    // Carregar seções
-    promptsManager.loadSecoes();
+    // Configurar navegação entre abas
+    setupNavigation();
     
-    // Mostrar dashboard
-    viewManager.showView('dashboard');
+    // Configurar busca
+    setupSearch();
+});
+
+// Configurar navegação
+function setupNavigation() {
+    const navLinks = document.querySelectorAll('.menu a');
     
-    // Toggle menu mobile
-    document.getElementById('mobile-toggle').addEventListener('click', () => {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('show-nav');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remover classe active de todos os links
+            navLinks.forEach(l => l.parentElement.classList.remove('active'));
+            
+            // Adicionar classe active ao link clicado
+            this.parentElement.classList.add('active');
+            
+            // Carregar a visão selecionada
+            const view = this.dataset.view;
+            loadView(view);
+        });
     });
+}
+
+// Carregar visão
+function loadView(view) {
+    // Limpar área de conteúdo
+    const contentTitle = document.getElementById('content-title');
+    const contentArea = document.getElementById('content-area');
     
-    // Fechar modais ao pressionar ESC
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
-            });
+    // Carregar visão apropriada
+    switch (view) {
+        case 'prompts':
+            contentTitle.textContent = 'Categoria';
+            // Recarregar seções/categorias
+            promptsManager.loadSections();
+            break;
+        case 'estrutura':
+            contentTitle.textContent = 'Estrutura';
+            contentArea.innerHTML = '<p class="empty-message">Funcionalidade em desenvolvimento</p>';
+            break;
+        case 'workspace':
+            contentTitle.textContent = 'Workspace';
+            contentArea.innerHTML = '<p class="empty-message">Funcionalidade em desenvolvimento</p>';
+            break;
+        default:
+            contentTitle.textContent = 'Categoria';
+            promptsManager.loadSections();
+    }
+}
+
+// Configurar busca
+function setupSearch() {
+    const searchInput = document.getElementById('search-input');
+    
+    searchInput.addEventListener('input', function() {
+        // Implementar busca
+        console.log('Busca:', this.value);
+    });
+}
+
+// Fechar modais quando clicar fora deles
+window.addEventListener('click', function(event) {
+    const modals = document.querySelectorAll('.modal');
+    
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
     });
 });
